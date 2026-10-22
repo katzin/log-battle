@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Log Battle — Jogo de Logaritmos</title>
+<style>
+:root{--bg:#0b1020;--panel:#151f36;--line:#304363;--txt:#f5f7ff;--muted:#aebbd5;--green:#48e0a0;--yellow:#ffd166;--red:#ff7188;--purple:#c0a6ff}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#1b2c50,#0b1020 65%);color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh}header{text-align:center;padding:25px 14px 10px}h1{font-size:clamp(2.1rem,5vw,3.6rem);margin:0;letter-spacing:1px}h1 span{color:var(--green)}header p{color:var(--muted);margin:8px 0}.wrap{max-width:1120px;margin:auto;padding:14px}.teams{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:15px}.team{background:#151f36;border:2px solid var(--line);border-radius:18px;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:10px}.team.active{border-color:var(--green);box-shadow:0 0 0 2px #48e0a022}.team h2{font-size:1.05rem;margin:0 0 4px}.score{font-size:2.25rem;font-weight:900}.team small{color:var(--muted)}button{font:inherit;font-weight:750;border:0;border-radius:11px;padding:10px 13px;cursor:pointer;transition:filter .15s,transform .15s}button:hover{filter:brightness(1.1);transform:translateY(-1px)}button:disabled{opacity:.45;cursor:not-allowed;transform:none}.secondary{background:#2b3b5d;color:var(--txt)}.primary{background:var(--green);color:#06160e}.danger{background:var(--red);color:#2b0710}.gold{background:var(--yellow);color:#241b00}.turnbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:#10182b;border:1px solid #263957;border-radius:14px;padding:12px 14px;margin-bottom:14px}.turnbar strong{color:var(--green)}.legend{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.pill{border-radius:999px;padding:7px 11px;font-size:.83rem;font-weight:850}.easy{background:#48e0a018;color:var(--green);border:1px solid #48e0a066}.medium{background:#ffd16618;color:var(--yellow);border:1px solid #ffd16666}.hard{background:#ff718818;color:var(--red);border:1px solid #ff718866}.challenge{background:#c0a6ff18;color:var(--purple);border:1px solid #c0a6ff66}.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px}.tile{min-height:105px;background:linear-gradient(145deg,#1c2b4a,#121a2d);border:1px solid #35496d;color:var(--txt);border-radius:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}.tile .num{font-size:1.5rem;font-weight:900}.tile .kind{font-size:.78rem;color:var(--muted)}.tile .pts{font-size:.9rem;font-weight:800}.tile.used{opacity:.35;cursor:not-allowed}.tile.used:after{content:'RESPONDIDA';font-size:.65rem;letter-spacing:1px;color:var(--green)}.tile.used span{display:none}.note{text-align:center;color:var(--muted);font-size:.9rem;margin:18px 0 28px}.overlay{display:none;position:fixed;inset:0;background:#050914e8;z-index:5;align-items:center;justify-content:center;padding:14px}.overlay.show{display:flex}.modal{width:min(760px,100%);max-height:94vh;overflow:auto;background:linear-gradient(145deg,#1a2948,#10182b);border:1px solid #40547d;border-radius:22px;padding:clamp(18px,4vw,30px);box-shadow:0 25px 90px #0009}.modaltop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.modal h2{font-size:clamp(1.35rem,3vw,2rem);line-height:1.4;margin:22px 0}.status{color:var(--muted);margin:8px 0}.answer{display:none;background:#0c1425;border:1px solid #314362;border-radius:14px;padding:16px;line-height:1.6;margin:14px 0}.answer.show{display:block}.answer strong{color:var(--green)}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}.hidden{display:none!important}.win{font-size:1.05rem;color:var(--yellow);font-weight:800}.rules{background:#111a2d;border:1px solid #263957;padding:14px 16px;border-radius:14px;color:var(--muted);line-height:1.55;margin:14px 0}.rules b{color:var(--txt)}@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.teams{grid-template-columns:1fr}.tile{min-height:85px}}
+</style></head><body>
+<header><h1>LOG <span>BATTLE</span></h1><p>Duelo de logaritmos • 2 grupos • quem resolve, pontua!</p></header>
+<main class="wrap">
+<section class="teams">
+<div class="team active" id="team0"><div><h2>🔵 Grupo 1</h2><small id="label0">É a vez deste grupo</small><div class="score" id="score0">0</div><small>pontos</small></div><button class="secondary" onclick="setTurn(0)">Selecionar</button></div>
+<div class="team" id="team1"><div><h2>🟠 Grupo 2</h2><small id="label1">Aguardando a vez</small><div class="score" id="score1">0</div><small>pontos</small></div><button class="secondary" onclick="setTurn(1)">Selecionar</button></div>
+</section>
+<div class="turnbar"><div>Grupo da vez: <strong id="turnName">Grupo 1</strong></div><div class="actions" style="margin:0"><button class="secondary" onclick="switchTurn()">Passar a vez ↔</button><button class="danger" onclick="resetGame()">Reiniciar jogo</button></div></div>
+<div class="legend"><span class="pill easy">FÁCIL · 100 pts</span><span class="pill medium">MÉDIO · 200 pts</span><span class="pill hard">DIFÍCIL · 300 pts</span><span class="pill challenge">DESAFIO · 500 pts</span></div>
+<div class="grid" id="board"></div>
+<div class="rules"><b>Como jogar:</b> o grupo da vez escolhe uma casa e tenta resolver a questão. Se acertar, recebe os pontos. Se errar, o outro grupo pode tentar roubar os pontos. Se os dois errarem, ninguém pontua. O professor ou apresentador confirma se a resposta está certa.</div>
+<p class="note">Dica: clique em “Revelar resposta” depois que o grupo responder.</p>
+</main>
+<div class="overlay" id="overlay" role="dialog" aria-modal="true"><div class="modal">
+<div class="modaltop"><span class="pill easy" id="category">FÁCIL · 100 pontos</span><button class="secondary" onclick="closeModal()">Fechar ✕</button></div>
+<h2 id="question"></h2><div class="status" id="status"></div><button class="gold" id="reveal" onclick="revealAnswer()">Revelar resposta</button><div class="answer" id="answer"></div>
+<div class="actions" id="initialActions"><button class="primary" onclick="awardCurrent()">Acertou · ganhar pontos</button><button class="danger" onclick="allowSteal()">Errou · liberar roubo</button></div>
+<div class="actions hidden" id="stealActions"><button class="primary" onclick="awardOther()">Outro grupo acertou · roubar pontos</button><button class="secondary" onclick="noOne()">Ninguém acertou</button></div>
+<div class="actions hidden" id="continueActions"><button class="primary" onclick="continueGame()">Continuar para próxima rodada</button></div>
+</div></div>
+<script>
+const qs=[
+{d:0,q:'Calcule: log₂ 8.',a:'3',e:'Como 2³ = 8, então log₂ 8 = 3.'},
+{d:0,q:'Calcule: log₁₀ 100.',a:'2',e:'Como 10² = 100, então log₁₀ 100 = 2.'},
+{d:0,q:'Calcule: log₃ 27.',a:'3',e:'Como 3³ = 27, então log₃ 27 = 3.'},
+{d:0,q:'Calcule: log₅ 1.',a:'0',e:'Toda base válida elevada a 0 é 1: 5⁰ = 1.'},
+{d:0,q:'Se log₂ x = 4, qual é o valor de x?',a:'x = 16',e:'Na forma exponencial, x = 2⁴ = 16.'},
+{d:1,q:'Calcule: log₂ 32.',a:'5',e:'Como 2⁵ = 32, o logaritmo vale 5.'},
+{d:1,q:'Calcule: log₄ 64.',a:'3',e:'Como 4³ = 64, então log₄ 64 = 3.'},
+{d:1,q:'Calcule: log₁₀ 0,01.',a:'−2',e:'0,01 = 10⁻², portanto o resultado é −2.'},
+{d:1,q:'Sabendo que log₂ 8 = 3 e log₂ 4 = 2, calcule log₂ 8 + log₂ 4.',a:'5',e:'Somamos os valores: 3 + 2 = 5.'},
+{d:1,q:'Resolva: log₃ x = 2.',a:'x = 9',e:'Na forma exponencial, x = 3² = 9.'},
+{d:2,q:'Calcule: log₂ 16 + log₂ 8.',a:'7',e:'log₂ 16 = 4 e log₂ 8 = 3; a soma é 7.'},
+{d:2,q:'Calcule: log₅ 125 − log₅ 5.',a:'2',e:'log₅ 125 = 3 e log₅ 5 = 1; a diferença é 2.'},
+{d:2,q:'Se log₁₀ x = 3, calcule log₁₀ (x/10).',a:'2',e:'x = 10³, logo x/10 = 10² e o logaritmo é 2.'},
+{d:2,q:'Resolva: log₂ (x − 1) = 3.',a:'x = 9',e:'x − 1 = 2³ = 8, então x = 9 (e x > 1).'},
+{d:2,q:'Calcule: log₃ 9 × log₂ 8.',a:'6',e:'log₃ 9 = 2 e log₂ 8 = 3; produto = 2 × 3 = 6.'},
+{d:3,q:'Resolva: log₂ x + log₂ 4 = 5.',a:'x = 8',e:'log₂ 4 = 2, então log₂ x = 3 e x = 2³ = 8.'},
+{d:3,q:'Resolva: log₃ (x + 1) = log₃ 10.',a:'x = 9',e:'Com a mesma base, x + 1 = 10; portanto x = 9.'},
+{d:3,q:'Calcule: log₂ 48 − log₂ 3.',a:'4',e:'Pela propriedade, log₂(48/3) = log₂ 16 = 4.'},
+{d:3,q:'Resolva: log₁₀ x + log₁₀ 2 = 2.',a:'x = 50',e:'log(2x) = 2, então 2x = 100 e x = 50.'},
+{d:3,q:'Desafio: resolva log₂ (x − 2) = 4 e confira o domínio.',a:'x = 18',e:'x − 2 = 2⁴ = 16, então x = 18. O domínio exige x > 2, condição satisfeita.'}
+];
+const lev=[{n:'FÁCIL',p:100,c:'easy'},{n:'MÉDIO',p:200,c:'medium'},{n:'DIFÍCIL',p:300,c:'hard'},{n:'DESAFIO',p:500,c:'challenge'}];let score=[0,0],turn=0,current=-1,used=new Set(),phase='initial';
+function render(){let b=document.getElementById('board');b.innerHTML='';qs.forEach((q,i)=>{let l=lev[q.d],x=document.createElement('button');x.className='tile'+(used.has(i)?' used':'');x.disabled=used.has(i);x.innerHTML=`<span class="num">${i+1}</span><span class="kind">${l.n}</span><span class="pts">${l.p} pontos</span>`;x.onclick=()=>openQ(i);b.appendChild(x)});update()}
+function update(){for(let i=0;i<2;i++){document.getElementById('score'+i).textContent=score[i];document.getElementById('team'+i).classList.toggle('active',turn===i);document.getElementById('label'+i).textContent=turn===i?'É a vez deste grupo':'Aguardando a vez'}document.getElementById('turnName').textContent='Grupo '+(turn+1)}
+function setTurn(t){turn=t;update()}function switchTurn(){turn=1-turn;update()}
+function openQ(i){current=i;phase='initial';let q=qs[i],l=lev[q.d];document.getElementById('category').className='pill '+l.c;document.getElementById('category').textContent=l.n+' · '+l.p+' pontos';document.getElementById('question').textContent=q.q;document.getElementById('status').textContent='Tentativa inicial: Grupo '+(turn+1);document.getElementById('answer').classList.remove('show');document.getElementById('answer').innerHTML='<strong>Resposta: '+q.a+'</strong><br>'+q.e;document.getElementById('reveal').disabled=false;showPhase('initial');document.getElementById('overlay').classList.add('show')}
+function showPhase(p){phase=p;document.getElementById('initialActions').classList.toggle('hidden',p!=='initial');document.getElementById('stealActions').classList.toggle('hidden',p!=='steal');document.getElementById('continueActions').classList.toggle('hidden',p!=='done')}
+function revealAnswer(){document.getElementById('answer').classList.add('show');document.getElementById('reveal').disabled=true}
+function awardCurrent(){score[turn]+=lev[qs[current].d].p;finish('Grupo '+(turn+1)+' ganhou '+lev[qs[current].d].p+' pontos!')}
+function allowSteal(){showPhase('steal');document.getElementById('status').textContent='Chance de roubo: Grupo '+(2-turn)+' pode responder.'}
+function awardOther(){score[1-turn]+=lev[qs[current].d].p;finish('Grupo '+(2-turn)+' roubou '+lev[qs[current].d].p+' pontos!')}
+function noOne(){finish('Ninguém pontuou nesta rodada.')}
+function finish(msg){used.add(current);render();document.getElementById('status').textContent=msg;showPhase('done');document.getElementById('answer').classList.add('show');document.getElementById('reveal').classList.add('hidden');if(used.size===qs.length){let result=score[0]===score[1]?'Empate!':score[0]>score[1]?'Grupo 1 venceu!':'Grupo 2 venceu!';document.getElementById('status').innerHTML=msg+'<br><span class="win">Fim de jogo: '+result+' Placar: '+score[0]+' × '+score[1]+'</span>'}}
+function continueGame(){closeModal();document.getElementById('reveal').classList.remove('hidden');if(used.size===qs.length){alert(score[0]===score[1]?'Fim de jogo! Empate!':'Fim de jogo! '+(score[0]>score[1]?'Grupo 1':'Grupo 2')+' venceu!');return}turn=1-turn;update()}
+function closeModal(){document.getElementById('overlay').classList.remove('show');document.getElementById('reveal').classList.remove('hidden')}
+function resetGame(){if(!confirm('Reiniciar o jogo e zerar os pontos?'))return;score=[0,0];turn=0;current=-1;used.clear();render();closeModal()}
+render();
+</script></body></html>
